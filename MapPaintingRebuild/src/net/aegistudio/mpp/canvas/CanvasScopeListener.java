@@ -30,6 +30,7 @@
  */
 package net.aegistudio.mpp.canvas;
 
+import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 //import com.palmergames.bukkit.towny.object.TownyPermission;
 //import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -192,8 +193,7 @@ public class CanvasScopeListener
         return WorldGuard.getInstance().getPlatform().getSessionManager().hasBypass(p, l);
     }
     
-    @SuppressWarnings("incomplete-switch")
-	@EventHandler
+    @EventHandler
     private void onDamage(EntityDamageByEntityEvent e) {
     	
     	
@@ -217,12 +217,18 @@ public class CanvasScopeListener
         	
         	Player p = ((Player)e.getDamager());
 	        
-	        // confirm player can edit
+	        // Worldedit check
 	        if (!isAllowedToPlaceCanvas(p, e.getEntity().getLocation())) {
-                p.sendMessage("§c[Paint]§7 You don't have permission to break this.");
                 e.setCancelled(true);
                 return;
             }
+	        
+	        // Towny check
+	        if (!TownyActionEventExecutor.canDestroy(p, itemFrame.getLocation(), Material.ITEM_FRAME)) {
+                p.sendMessage("§c[Paint]§7 Denied based on Towny build permission check.");
+	        	e.setCancelled(true);
+	        	return;
+	        }
 	        
 	        // remove the frame
 	        e.getEntity().remove();
@@ -233,43 +239,9 @@ public class CanvasScopeListener
 	        return;
         
         }
-        
-        // manage projectile breakage
-        if (e.getDamager() instanceof Projectile) {
-        	if (((Projectile)e.getDamager()).getShooter() instanceof Player) {
-        		Player p = (Player)((Projectile)e.getDamager()).getShooter();
-    	        
-    	    	// confirm damage is on an item frame
-    	        //if (!e.getEntityType().equals(EntityType.ITEM_FRAME)) return;
-    	        
-    	        // confirm item frame contains a filled map
-    	        //ItemFrame itemFrame = (ItemFrame) e.getEntity();
-    	        //if (itemFrame.getItem().getType() != Material.FILLED_MAP) return;
-    	        
-    	        // confirm player can edit
-    	        if (!isAllowedToPlaceCanvas(p, e.getEntity().getLocation())) {
-                    p.sendMessage("§c[Paint]§7 You don't have permission to break this with projectiles.");
-                    e.setCancelled(true);
-                    return;
-                }
-    	        
-    	        // remove the frame
-    	        e.getEntity().remove();
-    	        
-    	        
-    	        
-    	        // check if the registry contains the mapID , important to do this after removing the frame
-    	        //MapCanvasRegistry registry = JavaPlugin.getPlugin(MapPainting.class).canvas.idCanvasMap.get(mapId);
-    	        //if (registry == null) return;
-    	        
-    	        // only give the damager the canvas if it existed in registry
-    	        plugin.m_canvasManager.give(p, registry, 1);
-    	        
-    	        return;
-        	} else {
-        		// projectiles not from players should not destroy paintings.
-        		e.setCancelled(true);
-        	}
+        // Creeper explosions, arrows, etc
+        else {
+        	e.setCancelled(true);
         }
     }
 

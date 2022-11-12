@@ -44,19 +44,6 @@ public class CanvasPaintListener implements Listener {
         Player player = (Player) attack.getDamager();
         if (manipulate(itemFrame, registry, player, false))
             attack.setCancelled(true);
-        
-        if (TownyActionEventExecutor.canDestroy(player, itemFrame.getLocation(), Material.ITEM_FRAME))
-        	attack.setCancelled(true);
-        
-        System.out.println(CanvasScopeListener.canBuild(player, itemFrame.getLocation()));
-        System.out.println("Can destroy towny: " + );
-    }
-    
-    @EventHandler
-    public void onExplode(EntityExplodeEvent e) {
-    	for (Block b : e.blockList()) {
-    		if (b.)
-    	}
     }
 
     @EventHandler
