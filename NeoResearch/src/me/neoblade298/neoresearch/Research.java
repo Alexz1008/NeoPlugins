@@ -205,98 +205,91 @@ public class Research extends JavaPlugin implements Listener, IOComponent {
 			playerAttrs.put(uuid, new HashMap<Integer, StoredAttributes>());
 		}
 			
-		// Asynchronously look up sql and load it in
 		Research main = this;
-		BukkitRunnable load = new BukkitRunnable() {
-			public void run() {
-				int level = 5, exp = 0;
-				int expectedAttrs = 0;
-				HashMap<String, Integer> researchPoints = new HashMap<String, Integer>();
-				HashMap<String, Integer> mobKills = new HashMap<String, Integer>();
-				HashMap<String, ResearchItem> completedResearchItems = new HashMap<String, ResearchItem>();
-				try {
-					Class.forName("com.mysql.jdbc.Driver");
-					Connection con = DriverManager.getConnection(url, user, pass);
-					Statement stmt = con.createStatement();
-					ResultSet rs = stmt.executeQuery("SELECT * FROM research_accounts WHERE uuid = '" + uuid + "';");
-					
-					// Load in account info
-					if (rs.next()) {
-						level = rs.getInt(2);
-						exp = rs.getInt(3);
-	
-						rs = stmt.executeQuery("SELECT * FROM research_points WHERE uuid = '" + uuid + "';");
-						while (rs.next()) {
-							researchPoints.put(rs.getString(2), rs.getInt(3));
-						}
-	
-						rs = stmt.executeQuery("SELECT * FROM research_kills WHERE uuid = '" + uuid + "';");
-						while (rs.next()) {
-							mobKills.put(rs.getString(2), rs.getInt(3));
-						}
-						
-						rs = stmt.executeQuery("SELECT * FROM research_completed WHERE uuid = '" + uuid + "';");
-						while (rs.next()) {
-							try {
-								ResearchItem rItem = researchItems.get(rs.getString(2));
-								expectedAttrs += rItem.getAttrs();
-								completedResearchItems.put(rItem.getId(), rItem);
-							}
-							catch (Exception e) {
-								Bukkit.getLogger().log(Level.WARNING, "Could not load research item: " + rs.getString(2));
-							}
-						}
+		int level = 5, exp = 0;
+		int expectedAttrs = 0;
+		HashMap<String, Integer> researchPoints = new HashMap<String, Integer>();
+		HashMap<String, Integer> mobKills = new HashMap<String, Integer>();
+		HashMap<String, ResearchItem> completedResearchItems = new HashMap<String, ResearchItem>();
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url, user, pass);
+			ResultSet rs = stmt.executeQuery("SELECT * FROM research_accounts WHERE uuid = '" + uuid + "';");
+			
+			// Load in account info
+			if (rs.next()) {
+				level = rs.getInt(2);
+				exp = rs.getInt(3);
 
-						rs = stmt.executeQuery("SELECT * FROM research_attributes WHERE uuid = '" + uuid + "';");
-						HashMap<Integer, StoredAttributes> pAttrs = playerAttrs.get(uuid);
-						while (rs.next()) {
-							StoredAttributes pAttr = pAttrs.getOrDefault(rs.getInt(4), new StoredAttributes());
-							pAttr.addAttribute(rs.getString(2), rs.getInt(3));
-							pAttrs.put(rs.getInt(4), pAttr);
-						}
-						
-						for (Integer key : pAttrs.keySet()) {
-							StoredAttributes pAttr = pAttrs.get(key);
-							int actualAttrs = pAttr.countAttributes();
-							if (debug) {
-								Bukkit.getLogger().log(Level.INFO, "[NeoResearch] Loading account " + p.getName() + 
-										"Account " + key + ": Expected - " + expectedAttrs + ", Actual - " + actualAttrs);
-							}
-							if (expectedAttrs > actualAttrs) {
-								Bukkit.getLogger().log(Level.INFO, "[NeoResearch] Loading account " + p.getName() + 
-										" Account " + key + ": Expected - " + expectedAttrs + ", Actual - " + actualAttrs);
-								for (Entry<String, Integer> ent : pAttr.getStoredAttrs().entrySet()) {
-									Bukkit.getLogger().log(Level.INFO, ent.getKey() + ": " + ent.getValue());
-								}
-								pAttr.addAttribute("unused", expectedAttrs - actualAttrs);
-							}
-							else if (expectedAttrs < actualAttrs) {
-								Bukkit.getLogger().log(Level.INFO, "[NeoResearch] Loading account " + p.getName() + 
-										" Account " + key + ": Expected - " + expectedAttrs + ", Actual - " + actualAttrs);
-								for (Entry<String, Integer> ent : pAttr.getStoredAttrs().entrySet()) {
-									Bukkit.getLogger().log(Level.INFO, ent.getKey() + ": " + ent.getValue());
-								}
-								pAttr.removeStoredAttributes();
-								pAttr.addAttribute("unused", expectedAttrs);
-							}
-						}
-	
-						int acct = SkillAPI.getPlayerAccountData(p).getActiveId();
-						if (pAttrs.containsKey(acct)) {
-							pAttrs.get(acct).applyAttributes(p);
-						}
-						p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
-						playerStats.put(uuid, new PlayerStats(main, level, exp, completedResearchItems, researchPoints, mobKills));
-					}
-					con.close();
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				} finally {
-					playerStats.put(uuid, new PlayerStats(main, level, exp, completedResearchItems, researchPoints, mobKills));
+				rs = stmt.executeQuery("SELECT * FROM research_points WHERE uuid = '" + uuid + "';");
+				while (rs.next()) {
+					researchPoints.put(rs.getString(2), rs.getInt(3));
 				}
+
+				rs = stmt.executeQuery("SELECT * FROM research_kills WHERE uuid = '" + uuid + "';");
+				while (rs.next()) {
+					mobKills.put(rs.getString(2), rs.getInt(3));
+				}
+				
+				rs = stmt.executeQuery("SELECT * FROM research_completed WHERE uuid = '" + uuid + "';");
+				while (rs.next()) {
+					try {
+						ResearchItem rItem = researchItems.get(rs.getString(2));
+						expectedAttrs += rItem.getAttrs();
+						completedResearchItems.put(rItem.getId(), rItem);
+					}
+					catch (Exception e) {
+						Bukkit.getLogger().log(Level.WARNING, "Could not load research item: " + rs.getString(2));
+					}
+				}
+
+				rs = stmt.executeQuery("SELECT * FROM research_attributes WHERE uuid = '" + uuid + "';");
+				HashMap<Integer, StoredAttributes> pAttrs = playerAttrs.get(uuid);
+				while (rs.next()) {
+					StoredAttributes pAttr = new StoredAttributes();
+					pAttr.addAttribute(rs.getString(2), rs.getInt(3));
+					pAttrs.put(rs.getInt(4), pAttr);
+				}
+				
+				for (Integer key : pAttrs.keySet()) {
+					StoredAttributes pAttr = pAttrs.get(key);
+					int actualAttrs = pAttr.countAttributes();
+					if (debug) {
+						Bukkit.getLogger().log(Level.INFO, "[NeoResearch] Loading account " + p.getName() + 
+								"Account " + key + ": Expected - " + expectedAttrs + ", Actual - " + actualAttrs);
+					}
+					if (expectedAttrs > actualAttrs) {
+						Bukkit.getLogger().log(Level.INFO, "[NeoResearch] Loading account " + p.getName() + 
+								" Account " + key + ": Expected - " + expectedAttrs + ", Actual - " + actualAttrs);
+						for (Entry<String, Integer> ent : pAttr.getStoredAttrs().entrySet()) {
+							Bukkit.getLogger().log(Level.INFO, ent.getKey() + ": " + ent.getValue());
+						}
+						pAttr.addAttribute("unused", expectedAttrs - actualAttrs);
+					}
+					else if (expectedAttrs < actualAttrs) {
+						Bukkit.getLogger().log(Level.INFO, "[NeoResearch] Loading account " + p.getName() + 
+								" Account " + key + ": Expected - " + expectedAttrs + ", Actual - " + actualAttrs);
+						for (Entry<String, Integer> ent : pAttr.getStoredAttrs().entrySet()) {
+							Bukkit.getLogger().log(Level.INFO, ent.getKey() + ": " + ent.getValue());
+						}
+						pAttr.removeStoredAttributes();
+						pAttr.addAttribute("unused", expectedAttrs);
+					}
+				}
+
+				int acct = SkillAPI.getPlayerAccountData(p).getActiveId();
+				if (pAttrs.containsKey(acct)) {
+					pAttrs.get(acct).applyAttributes(p);
+				}
+				p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+				playerStats.put(uuid, new PlayerStats(main, level, exp, completedResearchItems, researchPoints, mobKills));
 			}
-		};
-		load.runTaskAsynchronously(this);
+			con.close();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			playerStats.put(uuid, new PlayerStats(main, level, exp, completedResearchItems, researchPoints, mobKills));
+		}
 	}
 	
 	@Override
