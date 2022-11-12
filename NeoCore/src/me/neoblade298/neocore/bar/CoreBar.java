@@ -87,7 +87,7 @@ public class CoreBar {
 	}
 	
 	public void setVisible(boolean visible) {
-		if (!enabled && !visible) return; // Don't make bar visible if not enabled
+		if (!enabled && visible) return; // Don't make bar visible if not enabled
 		bar.setVisible(visible);
 	}
 	
