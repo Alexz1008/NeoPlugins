@@ -1,8 +1,10 @@
 package me.neoblade298.neoquests.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import me.neoblade298.neocore.commands.CommandArgument;
 import me.neoblade298.neocore.commands.CommandArguments;
 import me.neoblade298.neocore.commands.Subcommand;
 import me.neoblade298.neocore.commands.SubcommandRunner;
@@ -10,7 +12,7 @@ import me.neoblade298.neoquests.quests.Quester;
 import me.neoblade298.neoquests.quests.QuestsManager;
 
 public class CmdQuestsGuide implements Subcommand {
-	private static final CommandArguments args = new CommandArguments();
+	private static final CommandArguments args = new CommandArguments(new CommandArgument("player", false));
 
 	@Override
 	public String getDescription() {
@@ -35,6 +37,9 @@ public class CmdQuestsGuide implements Subcommand {
 	@Override
 	public void run(CommandSender s, String[] args) {
 		Player p = (Player) s;
+		if (args.length == 1) {
+			p = Bukkit.getPlayer(args[0]);
+		}
 		Quester q = QuestsManager.getQuester(p);
 		q.displayGuide(s);
 	}
