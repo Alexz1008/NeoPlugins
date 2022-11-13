@@ -245,7 +245,7 @@ public class Research extends JavaPlugin implements Listener, IOComponent {
 				rs = stmt.executeQuery("SELECT * FROM research_attributes WHERE uuid = '" + uuid + "';");
 				HashMap<Integer, StoredAttributes> pAttrs = playerAttrs.get(uuid);
 				while (rs.next()) {
-					StoredAttributes pAttr = new StoredAttributes();
+					StoredAttributes pAttr = pAttrs.getOrDefault(rs.getInt(4), new StoredAttributes());
 					pAttr.addAttribute(rs.getString(2), rs.getInt(3));
 					pAttrs.put(rs.getInt(4), pAttr);
 				}
