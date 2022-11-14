@@ -3,14 +3,10 @@ package me.neoblade298.neosapiaddons.conditions;
 import java.util.List;
 
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-
 import com.google.common.collect.ImmutableList;
 import com.sucy.skill.dynamic.ComponentType;
 import com.sucy.skill.dynamic.custom.CustomEffectComponent;
 import com.sucy.skill.dynamic.custom.EditorOption;
-
-import io.lumine.mythic.bukkit.MythicBukkit;
 
 public class StringCondition extends CustomEffectComponent {
 
@@ -44,7 +40,7 @@ public class StringCondition extends CustomEffectComponent {
 
 	@Override
 	public String getKey() {
-		return "string";
+		return "String";
 	}
 
 	@Override

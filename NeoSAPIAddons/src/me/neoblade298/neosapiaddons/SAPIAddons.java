@@ -43,6 +43,7 @@ import me.neoblade298.neosapiaddons.conditions.AbsorptionCondition;
 import me.neoblade298.neosapiaddons.conditions.AttackChargeCondition;
 import me.neoblade298.neosapiaddons.conditions.BlockingCondition;
 import me.neoblade298.neosapiaddons.conditions.ManaNameCondition;
+import me.neoblade298.neosapiaddons.conditions.StringCondition;
 import me.neoblade298.neosapiaddons.mechanics.AddShieldsMechanic;
 import me.neoblade298.neosapiaddons.mechanics.IncreasePotionMechanic;
 import me.neoblade298.neosapiaddons.mechanics.SpawnMythicmobMechanic;
@@ -279,7 +280,8 @@ public class SAPIAddons extends JavaPlugin implements Listener, SkillPlugin {
             new AbsorptionCondition(),
             new AttackChargeCondition(),
             new ManaNameCondition(),
-            new BlockingCondition()
+            new BlockingCondition(),
+            new StringCondition()
         );
     }
     
