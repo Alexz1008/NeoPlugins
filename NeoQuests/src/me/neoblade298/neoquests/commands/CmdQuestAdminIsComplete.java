@@ -15,7 +15,7 @@ import me.neoblade298.neoquests.quests.CompletedQuest;
 import me.neoblade298.neoquests.quests.Quester;
 import me.neoblade298.neoquests.quests.QuestsManager;
 
-public class CmdQuestsIsComplete implements Subcommand {
+public class CmdQuestAdminIsComplete implements Subcommand {
 	private static final CommandArguments args = new CommandArguments(Arrays.asList(new CommandArgument("key"), new CommandArgument("player", false)));
 
 	@Override
