@@ -10,31 +10,41 @@ import com.sucy.skill.dynamic.ComponentType;
 import com.sucy.skill.dynamic.custom.CustomEffectComponent;
 import com.sucy.skill.dynamic.custom.EditorOption;
 
-public class BlockingCondition extends CustomEffectComponent {
+import io.lumine.mythic.bukkit.MythicBukkit;
+
+public class StringCondition extends CustomEffectComponent {
 
 	@Override
 	public String getDescription() {
-		return "Check if player is blocking with shield";
+		return "Compare a value to a string";
 	}
 
 	@Override
 	public List<EditorOption> getOptions() {
         return ImmutableList.of(
-                EditorOption.dropdown("type", "Type", "Is blocking", ImmutableList.of("Blocking", "Not Blocking"))
+                EditorOption.text(
+                        "key",
+                        "Key",
+                        "Key of value to compare",
+                        "value"),
+                EditorOption.text(
+                        "comp",
+                        "Comparator",
+                        "Case-insensitive string to compare to",
+                        "string")
         );
 	}
 
 	@Override
 	public boolean execute(LivingEntity caster, int lvl, List<LivingEntity> targets, double critChance) {
-    	Player p = (Player) caster;
-        final boolean blocking = p.isBlocking();
-        final boolean wantBlocking = settings.getString("type", "blocking").equalsIgnoreCase("blocking");
-        return blocking == wantBlocking && executeChildren(caster, lvl, targets, critChance);
+		String key = settings.getString("key");
+		String comparator = settings.getString("comp");
+		return key.equalsIgnoreCase(comparator);
 	}
 
 	@Override
 	public String getKey() {
-		return "Blocking";
+		return "string";
 	}
 
 	@Override

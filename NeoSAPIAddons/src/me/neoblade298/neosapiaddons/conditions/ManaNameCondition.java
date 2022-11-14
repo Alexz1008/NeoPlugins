@@ -38,7 +38,7 @@ public class ManaNameCondition extends CustomEffectComponent {
 
 	@Override
 	public String getKey() {
-		return "mana name";
+		return "Mana Name";
 	}
 
 	@Override

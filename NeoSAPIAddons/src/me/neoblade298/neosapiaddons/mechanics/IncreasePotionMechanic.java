@@ -66,7 +66,7 @@ public class IncreasePotionMechanic extends CustomEffectComponent {
 
 	@Override
 	public String getKey() {
-		return "increase potion";
+		return "Increase Potion";
 	}
 
 	@Override

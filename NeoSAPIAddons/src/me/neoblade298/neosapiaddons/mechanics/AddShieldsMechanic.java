@@ -75,7 +75,7 @@ public class AddShieldsMechanic extends CustomEffectComponent {
 
 	@Override
 	public String getKey() {
-		return "add shields";
+		return "Add Shields";
 	}
 
 	@Override

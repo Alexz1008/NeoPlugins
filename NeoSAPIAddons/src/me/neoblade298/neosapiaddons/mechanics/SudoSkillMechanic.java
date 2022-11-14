@@ -45,7 +45,7 @@ public class SudoSkillMechanic extends CustomEffectComponent {
 
 	@Override
 	public String getKey() {
-		return "sudoskill";
+		return "Sudoskill";
 	}
 
 	@Override

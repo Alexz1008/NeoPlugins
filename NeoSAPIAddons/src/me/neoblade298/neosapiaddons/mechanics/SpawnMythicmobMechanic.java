@@ -87,7 +87,7 @@ public class SpawnMythicmobMechanic extends CustomEffectComponent {
 
 	@Override
 	public String getKey() {
-		return "spawn mythicmob";
+		return "Spawn Mythicmob";
 	}
 
 	@Override

@@ -59,7 +59,7 @@ public class ValueAttackSpeedMechanic extends CustomEffectComponent {
 
 	@Override
 	public String getKey() {
-		return "value attackspeed";
+		return "Value Attackspeed";
 	}
 
 	@Override

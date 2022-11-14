@@ -40,7 +40,7 @@ public class AbsorptionCondition extends CustomEffectComponent {
 
 	@Override
 	public String getKey() {
-		return "absorption";
+		return "Absorption";
 	}
 
 	@Override

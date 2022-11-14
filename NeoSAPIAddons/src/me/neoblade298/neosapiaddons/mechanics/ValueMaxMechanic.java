@@ -64,7 +64,7 @@ public class ValueMaxMechanic extends CustomEffectComponent {
 
 	@Override
 	public String getKey() {
-		return "value max";
+		return "Value Max";
 	}
 
 	@Override
