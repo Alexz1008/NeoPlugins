@@ -313,7 +313,6 @@ public class Research extends JavaPlugin implements Listener, IOComponent {
 		try {
 			PlayerStats stats = playerStats.get(uuid);
 			if (playerStats.containsKey(uuid)) {
-				int expectedAttrs = 0;
 	
 				// Save account
 				insert.addBatch("REPLACE INTO research_accounts VALUES ('" + uuid + "','" + stats.getLevel()
@@ -333,30 +332,15 @@ public class Research extends JavaPlugin implements Listener, IOComponent {
 				for (Entry<String, ResearchItem> entry : stats.getCompletedResearchItems().entrySet()) {
 					String name = entry.getValue().getId();
 					insert.addBatch("REPLACE INTO research_completed values('" + uuid + "','" + name + "');");
-					expectedAttrs += entry.getValue().getAttrs();
 				}
 			
 				// Save each account
 				for (Integer key : playerAttrs.get(uuid).keySet()) {
-					int actualAttrs = 0;
 					
 					StoredAttributes pAttrs = playerAttrs.get(uuid).get(key);
 					for (String attr : StoredAttributes.attrs) {
 						insert.addBatch("REPLACE INTO research_attributes values('" + uuid + "','" + attr + "'," + pAttrs.getAttribute(attr) + "," +
 								key + ");");
-						if (p.getName().equals("Neoblade298")) {
-							Bukkit.getLogger().info("REPLACE INTO research_attributes values('" + uuid + "','" + attr + "'," + pAttrs.getAttribute(attr) + "," +
-								key + ");");
-						}
-						actualAttrs += pAttrs.getAttribute(attr);
-					}
-
-					Bukkit.getLogger().log(Level.INFO, "[NeoResearch] Saving account " + p.getName() + 
-							" Account " + key + ": Expected - " + expectedAttrs + ", Actual - " + actualAttrs);
-					if (actualAttrs > expectedAttrs) {
-						for (Entry<String, Integer> ent : pAttrs.getStoredAttrs().entrySet()) {
-							Bukkit.getLogger().log(Level.INFO, ent.getKey() + ": " + ent.getValue());
-						}
 					}
 				}
 			}
