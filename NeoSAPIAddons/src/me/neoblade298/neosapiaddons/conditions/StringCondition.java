@@ -1,10 +1,12 @@
 package me.neoblade298.neosapiaddons.conditions;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.entity.LivingEntity;
 import com.google.common.collect.ImmutableList;
 import com.sucy.skill.dynamic.ComponentType;
+import com.sucy.skill.dynamic.DynamicSkill;
 import com.sucy.skill.dynamic.custom.CustomEffectComponent;
 import com.sucy.skill.dynamic.custom.EditorOption;
 
@@ -24,9 +26,9 @@ public class StringCondition extends CustomEffectComponent {
                         "Key of value to compare",
                         "value"),
                 EditorOption.text(
-                        "comp",
+                        "comp key",
                         "Comparator",
-                        "Case-insensitive string to compare to",
+                        "Case-insensitive value to compare to",
                         "string")
         );
 	}
@@ -35,7 +37,10 @@ public class StringCondition extends CustomEffectComponent {
 	public boolean execute(LivingEntity caster, int lvl, List<LivingEntity> targets, double critChance) {
 		String key = settings.getString("key");
 		String comparator = settings.getString("comp");
-		return key.equalsIgnoreCase(comparator);
+        HashMap<String, Object> data = DynamicSkill.getCastData(caster);
+        String str1 = (String) data.getOrDefault(key, "");
+        String str2 = (String) data.getOrDefault(comparator, "");
+		return str1.equalsIgnoreCase(str2) && executeChildren(caster, lvl, targets, critChance);
 	}
 
 	@Override
