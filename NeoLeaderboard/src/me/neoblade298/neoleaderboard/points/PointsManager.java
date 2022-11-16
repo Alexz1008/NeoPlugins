@@ -393,6 +393,7 @@ public class PointsManager implements IOComponent {
 	@Override
 	public void savePlayer(Player p, Statement insert, Statement delete) {
 		try {
+			// Delete if the player left town/nation
 			if (!playerEntries.containsKey(p.getUniqueId())) {
 				UUID uuid = p.getUniqueId();
 				delete.addBatch("DELETE FROM neoleaderboard_players WHERE uuid = '" + uuid + "';");
@@ -414,14 +415,6 @@ public class PointsManager implements IOComponent {
 		catch (Exception e) {
 			Bukkit.getLogger().warning("[NeoLeaderboard] Failed to save player " + p.getName() + " on cleanup.");
 			e.printStackTrace();
-		}
-		finally {
-			// Remove references so they don't show up in things like town top players
-			if (playerEntries.containsKey(p.getUniqueId())) {
-				playerEntries.get(p.getUniqueId()).clear();
-			}
-			
-			playerEntries.remove(p.getUniqueId());
 		}
 	}
 	
