@@ -47,12 +47,12 @@ public class MenacingAugment extends Augment implements ModDamageTakenAugment, M
 
 	@Override
 	public double getManaGainMult(Player user) {
-		return resourceMult * (resourceMultLvl * ((level / 5) - 1));
+		return resourceMult + (resourceMultLvl * ((level / 5) - 1));
 	}
 	
 	@Override
 	public double getDamageTakenMult(LivingEntity user) {
-		return damageTakenMult * (damageTakenMultLvl * ((level / 5) - 1));
+		return damageTakenMult + (damageTakenMultLvl * ((level / 5) - 1));
 	}
 
 	@Override
