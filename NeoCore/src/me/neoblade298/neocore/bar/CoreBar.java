@@ -22,22 +22,26 @@ public class CoreBar {
 		this.bar = bar;
 		bar.setVisible(false);
 		bar.addPlayer(p);
-		enabled = !ptags.exists("disable-corebar", p.getUniqueId());
+		enabled = false;
+		new BukkitRunnable() {
+			public void run() {
+				enabled = !ptags.exists("disable-corebar", p.getUniqueId());
+				if (!topic.equals("") && enabled) bar.setVisible(true);
+			}
+		}.runTaskLater(NeoCore.inst(), 140L);
 	}
 	
 	public void setTitle(String title) {
-		if (!enabled) return;
-		
 		if (isProgressing) {
 			runAfterProgressing.add(new Runnable() {
 				public void run() {
-					if (!bar.isVisible()) bar.setVisible(true);
+					if (!bar.isVisible() && enabled) bar.setVisible(true);
 					bar.setTitle(title);
 				}
 			});
 		}
 		else {
-			if (!bar.isVisible()) bar.setVisible(true);
+			if (!bar.isVisible() && enabled) bar.setVisible(true);
 			bar.setTitle(title);
 		}
 	}
@@ -151,7 +155,9 @@ public class CoreBar {
 		this.enabled = enabled;
 		if (!enabled && bar.isVisible()) {
 			bar.setVisible(false);
-			topic = "";
+		}
+		else if (enabled && !bar.isVisible()) {
+			bar.setVisible(true);
 		}
 	}
 	
