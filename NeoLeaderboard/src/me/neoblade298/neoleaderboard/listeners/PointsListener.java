@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,6 +14,8 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.scheduler.BukkitRunnable;
+
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -20,6 +23,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import me.neoblade298.neobossinstances.Boss;
 import me.neoblade298.neobossinstances.BossInstances;
 import me.neoblade298.neocore.bungee.PluginMessageEvent;
+import me.neoblade298.neoleaderboard.NeoLeaderboard;
 import me.neoblade298.neoleaderboard.points.PlayerPointType;
 import me.neoblade298.neoleaderboard.points.PointsManager;
 
@@ -32,6 +36,16 @@ public class PointsListener implements Listener {
 	private static final long DEATH_COOLDOWN = 600000L;
 	
 	private HashMap<Player, Long> playtime = new HashMap<Player, Long>();
+	
+	public PointsListener() {
+		new BukkitRunnable() {
+			public void run() {
+				for (Player p : Bukkit.getOnlinePlayers()) {
+					PointsManager.addPlayerPoints(p.getUniqueId(), MINUTES_ONLINE_POINTS, PlayerPointType.PLAYTIME);
+				}
+			}
+		}.runTaskTimerAsynchronously(NeoLeaderboard.inst(), 0L, 20 * 60);
+	}
 
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent e) {
@@ -83,11 +97,7 @@ public class PointsListener implements Listener {
 	}
 	
 	private void handleLeave(Player p) {
-		if (playtime.containsKey(p)) {
-			long millisPlayed = System.currentTimeMillis() - playtime.get(p);
-			long minutes = millisPlayed / (1000 * 60);
-			PointsManager.addPlayerPoints(p.getUniqueId(), MINUTES_ONLINE_POINTS * minutes, PlayerPointType.PLAYTIME);
-		}
+		// Does nothing atm
 	}
 
 	@EventHandler
