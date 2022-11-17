@@ -28,6 +28,7 @@ import de.tr7zw.nbtapi.NBTItem;
 import me.neoblade298.neocore.NeoCore;
 import me.neoblade298.neocore.blockdata.CustomBlockData;
 import me.neoblade298.neocore.exceptions.NeoIOException;
+import me.neoblade298.neocore.util.Util;
 import net.Indyuce.mmoitems.MMOItems;
 import net.Indyuce.mmoitems.gui.CraftingStationView;
 
@@ -101,6 +102,7 @@ public class Journey extends JavaPlugin implements org.bukkit.event.Listener {
 			Block b = e.getBlockPlaced();
 			PersistentDataContainer data = new CustomBlockData(b, this);
 			data.set(stationKey, PersistentDataType.STRING, id);
+			Bukkit.getLogger().info("[NeoJourney] Created station " + id + " at " + Util.locToString(b.getLocation(), true, false));
 		}
 	}
 	
