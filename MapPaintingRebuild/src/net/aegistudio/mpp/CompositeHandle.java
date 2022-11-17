@@ -49,18 +49,18 @@ public class CompositeHandle extends ActualHandle {
         }
         
     	/* MLMC STUPIDITY
-        sender.sendMessage("§7Type §9/tutorial§7 and visit the painting tutorial for a full guide!");
-        sender.sendMessage("§7- §c/paint create §7[painting name] [size 1-128] <BG color> §7(§e1000g§7)");
-        sender.sendMessage("§cRecommended size is 64!");
-        sender.sendMessage("§7- §c/paint clone §7[painting you want to clone] <quantity 1-64> (§e250g each§7)");
-        sender.sendMessage("§7- §c/paint copy §7[name for new painting] [name of painting to copy] (§e500g§7)");
-        sender.sendMessage("§7- §c/paint buy §7[color] §7(§e250g§7)");
-        sender.sendMessage("§7- §c/paint buy §7[red 0-255] [green 0-255] [blue 0-255] §7(§e1000g§7)");
-        sender.sendMessage("§7- §c/paint delete §7[painting name]");
-        sender.sendMessage("§7- §c/paint list §7<keyword>");
-        sender.sendMessage("§7- §c/paint undo");
-        sender.sendMessage("§7- §c/paint redo");
-        sender.sendMessage("§7- §c/paint rename §7[old name] [new name] (§e100g§7)");
+        sender.sendMessage("Â§7Type Â§9/tutorialÂ§7 and visit the painting tutorial for a full guide!");
+        sender.sendMessage("Â§7- Â§c/paint create Â§7[painting name] [size 1-128] <BG color> Â§7(Â§e1000gÂ§7)");
+        sender.sendMessage("Â§cRecommended size is 64!");
+        sender.sendMessage("Â§7- Â§c/paint clone Â§7[painting you want to clone] <quantity 1-64> (Â§e250g eachÂ§7)");
+        sender.sendMessage("Â§7- Â§c/paint copy Â§7[name for new painting] [name of painting to copy] (Â§e500gÂ§7)");
+        sender.sendMessage("Â§7- Â§c/paint buy Â§7[color] Â§7(Â§e250gÂ§7)");
+        sender.sendMessage("Â§7- Â§c/paint buy Â§7[red 0-255] [green 0-255] [blue 0-255] Â§7(Â§e1000gÂ§7)");
+        sender.sendMessage("Â§7- Â§c/paint delete Â§7[painting name]");
+        sender.sendMessage("Â§7- Â§c/paint list Â§7<keyword>");
+        sender.sendMessage("Â§7- Â§c/paint undo");
+        sender.sendMessage("Â§7- Â§c/paint redo");
+        sender.sendMessage("Â§7- Â§c/paint rename Â§7[old name] [new name] (Â§e100gÂ§7)");
         */
         
     }

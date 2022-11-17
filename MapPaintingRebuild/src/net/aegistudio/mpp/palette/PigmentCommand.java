@@ -208,13 +208,13 @@ public class PigmentCommand extends ActualHandle {
 			Color awtColor = Pcolor.color;
 			String paintname = "";
 			if (!basic) {
-				paintname = "งlงc" + awtColor.getRed() + " งa" + awtColor.getGreen() + " ง9" + awtColor.getBlue();
+				paintname = "ยงlยงc" + awtColor.getRed() + " ยงa" + awtColor.getGreen() + " ยง9" + awtColor.getBlue();
 			} else {
 				String firstletter = arguments[0].substring(0,1).toUpperCase();
 				String remainder = arguments[0].substring(1);
-				paintname = "งf" + firstletter + remainder;
+				paintname = "ยงf" + firstletter + remainder;
 			}
-			meta.setDisplayName("ง6Paint: " + paintname);
+			meta.setDisplayName("ยง6Paint: " + paintname);
 			meta.setColor(org.bukkit.Color.fromRGB(awtColor.getRed(), awtColor.getGreen(), awtColor.getBlue()));
 			item.setItemMeta(meta);
 			sender.sendMessage(this.gavePigment.replace("$name", paintname));
