@@ -151,10 +151,21 @@ public class CanvasScopeListener
     	}
     	
     	*/
+    	
+    	if (player.hasPermission("mpp.admin")) {
+    		player.sendMessage("§c[Paint]§7 Allowed placement based on admin override");
+    		return true;
+    	}
         
         // if player can't build per WorldGuard, reject
         if (!canBuild(player, location)) {
         	player.sendMessage("§c[Paint]§7 Denied based on WorldGuard build permission check.");
+        	return false;
+        }
+        
+        // Towny check
+        if (!TownyActionEventExecutor.canBuild(player, location, Material.ITEM_FRAME)) {
+            player.sendMessage("§c[Paint]§7 Denied based on Towny build permission check.");
         	return false;
         }
         
@@ -216,19 +227,25 @@ public class CanvasScopeListener
         if (e.getDamager() instanceof Player) {		
         	
         	Player p = ((Player)e.getDamager());
+        	
+        	if (p.hasPermission("mpp.admin")) {
+        		p.sendMessage("§c[Paint]§7 Allowed destruction based on admin override");
+        	}
+        	else {
+    	        // Worldguard check
+    	        if (!isAllowedToPlaceCanvas(p, e.getEntity().getLocation())) {
+                    e.setCancelled(true);
+                    return;
+                }
+    	        
+    	        // Towny check
+    	        if (!TownyActionEventExecutor.canDestroy(p, itemFrame.getLocation(), Material.ITEM_FRAME)) {
+                    p.sendMessage("§c[Paint]§7 Denied based on Towny build permission check.");
+    	        	e.setCancelled(true);
+    	        	return;
+    	        }
+        	}
 	        
-	        // Worldedit check
-	        if (!isAllowedToPlaceCanvas(p, e.getEntity().getLocation())) {
-                e.setCancelled(true);
-                return;
-            }
-	        
-	        // Towny check
-	        if (!TownyActionEventExecutor.canDestroy(p, itemFrame.getLocation(), Material.ITEM_FRAME)) {
-                p.sendMessage("§c[Paint]§7 Denied based on Towny build permission check.");
-	        	e.setCancelled(true);
-	        	return;
-	        }
 	        
 	        // remove the frame
 	        e.getEntity().remove();
