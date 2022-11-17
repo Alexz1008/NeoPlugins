@@ -19,7 +19,7 @@ import me.Neoblade298.NeoProfessions.Managers.AugmentManager;
 public class BurstAugment extends Augment implements ModDamageDealtAugment {
 	private static double damageMult = AugmentManager.getValue("burst.damage-multiplier-base");
 	private static double damageMultLvl = AugmentManager.getValue("burst.damage-multiplier-per-lvl");
-	private static int minMp = (int) AugmentManager.getValue("burst.mana-percent-min");
+	private static double minMp = AugmentManager.getValue("burst.mana-percent-min");
 	
 	public BurstAugment() {
 		super();
@@ -54,7 +54,7 @@ public class BurstAugment extends Augment implements ModDamageDealtAugment {
 		ItemMeta meta = item.getItemMeta();
 		List<String> lore = meta.getLore();
 		lore.add("§7Increases damage by §f" + formatPercentage(getDamageDealtMult(user)) + "% §7when dealing");
-		lore.add("§7damage above " + minMp + "% mana.");
+		lore.add("§7damage above " + formatPercentage(minMp) + "% mana.");
 		lore.add("§cOnly works with mana.");
 		meta.setLore(lore);
 		item.setItemMeta(meta);
