@@ -3,7 +3,6 @@ package me.neoblade298.neochatmod;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -92,15 +91,9 @@ public class Main extends JavaPlugin implements Listener {
 		for (String word : bannedWords) {
 			if (msg.toUpperCase().contains(word)) {
 				e.setCancelled(true);
-				try {
-					for (String cmd : punishCmds) {
-						Bukkit.getScheduler().callSyncMethod(this, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd.replaceAll("%player%", sender.getName())
-								.replaceAll("%word%", word).replaceAll("msg", msg))).get();
-					}
-				} catch (InterruptedException e1) {
-					e1.printStackTrace();
-				} catch (ExecutionException e1) {
-					e1.printStackTrace();
+				for (String cmd : punishCmds) {
+					Bukkit.getScheduler().callSyncMethod(this, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd.replaceAll("%player%", sender.getName())
+							.replaceAll("%word%", word).replaceAll("%msg%", msg)));
 				}
 				
 				for (Player p : Bukkit.getServer().getOnlinePlayers()) {

@@ -31,15 +31,13 @@ public class Commands implements CommandExecutor {
 	public boolean onCommand(CommandSender s, Command cmd, String lbl, String[] args) {
 		if (!(s instanceof Player)) {
 			if (args.length > 1 && args[0].equalsIgnoreCase("auto")) {
-				if (args.length == 3) {
-					PPR ppr = new PPR(Main.nextPPR, "Console");
-					Main.nextPPR++;
-					ppr.setUser(args[1]);
-					ppr.setOffense("Banned word");
-					ppr.setAction("Automuted by bot");
-					ppr.setDescription("Said: " + Util.connectArgs(args, 2));
-					ppr.postConsole(s);
-				}
+				PPR ppr = new PPR(Main.nextPPR, "Console");
+				Main.nextPPR++;
+				ppr.setUser(args[1]);
+				ppr.setOffense("Banned word");
+				ppr.setAction("Automuted by bot");
+				ppr.setDescription("Said: " + Util.connectArgs(args, 2));
+				ppr.postConsole(s);
 			}
 		}
 		if (s.hasPermission("neopprs.admin")) {
@@ -48,7 +46,7 @@ public class Commands implements CommandExecutor {
 				s.sendMessage("§7--- §cNeoPPRs §7(1/2) ---");
 				s.sendMessage(
 						"§c/ppr create [name] {xray/racism} §7- Creates PPR, optionally use the xray/racism shortcut");
-				s.sendMessage("§c/ppr auto [name] banned-word §7- Automatically creates and posts banned word PPR");
+				s.sendMessage("§c/ppr auto [name] banned-words §7- Automatically creates and posts banned msg PPR");
 				s.sendMessage("§c/ppr offense §7- Sets offense for PPR");
 				s.sendMessage("§c/ppr action §7- Sets action for PPR");
 				s.sendMessage("§c/ppr desc §7- Sets description for PPR");
