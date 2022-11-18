@@ -119,6 +119,7 @@ public class Journey extends JavaPlugin implements org.bukkit.event.Listener {
         if (!data.has(stationKey, PersistentDataType.STRING)) return;
         
         String id = data.get(stationKey, PersistentDataType.STRING);
+        id = id.toLowerCase().replaceAll("_", "-");
         CraftingStationView view = new CraftingStationView(p, MMOItems.plugin.getCrafting().getStation(id), 1);
         view.open();
         e.setCancelled(true);
