@@ -17,7 +17,7 @@ import me.Neoblade298.NeoProfessions.Managers.AugmentManager;
 public class FinisherAugment extends Augment implements ModDamageDealtAugment {
 	private static double damageMult = AugmentManager.getValue("finisher.damage-multiplier-base");
 	private static double damageMultLvl = AugmentManager.getValue("finisher.damage-multiplier-per-lvl");
-	private static int maxHealth = (int) AugmentManager.getValue("finisher.health-percent-max");
+	private static double maxHealth = AugmentManager.getValue("finisher.health-percent-max");
 	
 	public FinisherAugment() {
 		super();
@@ -52,7 +52,7 @@ public class FinisherAugment extends Augment implements ModDamageDealtAugment {
 		ItemMeta meta = item.getItemMeta();
 		List<String> lore = meta.getLore();
 		lore.add("§7Increases damage by §f" + formatPercentage(getDamageDealtMult(user)) + "% §7when dealing");
-		lore.add("§7damage to an enemy below " + maxHealth + "% health.");
+		lore.add("§7damage to an enemy below " + formatPercentage(maxHealth) + "% health.");
 		meta.setLore(lore);
 		item.setItemMeta(meta);
 		return item;
