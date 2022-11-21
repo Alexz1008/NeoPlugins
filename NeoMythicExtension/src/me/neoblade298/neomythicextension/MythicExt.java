@@ -19,6 +19,7 @@ import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.ISkillMechanic;
 import io.lumine.mythic.api.skills.conditions.ISkillCondition;
 import io.lumine.mythic.api.skills.targeters.ISkillTargeter;
+import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.bukkit.events.MythicConditionLoadEvent;
 import io.lumine.mythic.bukkit.events.MythicDropLoadEvent;
 import io.lumine.mythic.bukkit.events.MythicMechanicLoadEvent;
@@ -163,6 +164,9 @@ public class MythicExt extends JavaPlugin implements Listener {
 		MythicLineConfig cfg = event.getConfig();
 
 		switch (name) {
+		case "elementdamage":
+			mechanic = new ElementDamage(MythicBukkit.inst().getSkillManager(), cfg.getLine(), cfg);
+			break;
 		case "nscore":
 			mechanic = new ModScore(cfg, this);
 			break;
