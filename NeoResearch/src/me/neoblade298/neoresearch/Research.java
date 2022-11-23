@@ -199,11 +199,13 @@ public class Research extends JavaPlugin implements Listener, IOComponent {
 	public void loadPlayer(Player p, Statement stmt) {
 		UUID uuid = p.getUniqueId();
 		
-		// Add them to attrs
-		if (!playerAttrs.containsKey(uuid)) {
-			playerAttrs.put(uuid, new HashMap<Integer, StoredAttributes>());
+		Bukkit.getLogger().info("[NeoResearch] Attempting to load player " + p.getName());
+		// Only load if their account doesn't exist, attempts to fix double load
+		if (playerAttrs.containsKey(uuid)) {
+			return;
 		}
-			
+
+		playerAttrs.put(uuid, new HashMap<Integer, StoredAttributes>());
 		Research main = this;
 		int level = 5, exp = 0;
 		int expectedAttrs = 0;
