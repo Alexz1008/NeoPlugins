@@ -53,11 +53,11 @@ public class CmdNLCTop implements Subcommand {
 
 	@Override
 	public void run(CommandSender s, String[] args) {
-		PointType type;
-		if (PlayerPointType.valueOf(args[0].toUpperCase()) != null) {
+		PointType type = null;
+		try {
 			type = PlayerPointType.valueOf(args[0].toUpperCase());
 		}
-		else {
+		catch (IllegalArgumentException ex) {
 			type = NationPointType.valueOf(args[0].toUpperCase());
 		}
 		
@@ -65,16 +65,17 @@ public class CmdNLCTop implements Subcommand {
 			Util.msg(s, "&cInvalid category");
 			return;
 		}
+		final PointType ftype = type;
 		
 		new BukkitRunnable() {
 			public void run() {
 				Comparator<NationEntry> comp = new Comparator<NationEntry>() {
 					@Override
 					public int compare(NationEntry n1, NationEntry n2) {
-						if (n1.getPoints(type) > n2.getPoints(type)) {
+						if (n1.getPoints(ftype) > n2.getPoints(ftype)) {
 							return 1;
 						}
-						else if (n1.getPoints(type) < n2.getPoints(type)) {
+						else if (n1.getPoints(ftype) < n2.getPoints(ftype)) {
 							return -1;
 						}
 						else {
@@ -86,16 +87,16 @@ public class CmdNLCTop implements Subcommand {
 				sorted.addAll(PointsManager.getNationEntries());
 				Iterator<NationEntry> iter = sorted.descendingIterator();
 				
-				ComponentBuilder builder = new ComponentBuilder("§c§lTop Nations: §e" + type.getDisplay());
+				ComponentBuilder builder = new ComponentBuilder("§c§lTop Nations: §e" + ftype.getDisplay());
 				int i = 0;
 				while (iter.hasNext() && i++ < 10) {
 					NationEntry e = iter.next();
 					String name = e.getNation().getName();
 					// double effective = PointsManager.calculateEffectivePoints(e, e.getPoints(type));
-					builder.append("\n§6§l" + i + ". §e" + name + " §7- §f" + PointsManager.formatPoints(e.getPoints(type)), FormatRetention.NONE);
-					if (type instanceof PlayerPointType) {
-						builder.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("/nlc nation " + name + " " + type)))
-						.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/nlc nation " + name + " " + type));
+					builder.append("\n§6§l" + i + ". §e" + name + " §7- §f" + PointsManager.formatPoints(e.getPoints(ftype)), FormatRetention.NONE);
+					if (ftype instanceof PlayerPointType) {
+						builder.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("/nlc nation " + name + " " + ftype)))
+						.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/nlc nation " + name + " " + ftype));
 					}
 				}
 				s.spigot().sendMessage(builder.create());

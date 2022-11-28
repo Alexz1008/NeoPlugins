@@ -62,8 +62,10 @@ public class CmdNLCNation implements Subcommand {
 		}
 		PlayerPointType type = null;
 		if (args.length > 1) {
-			type = PlayerPointType.valueOf(args[1].toUpperCase());
-			if (type == null) {
+			try {
+				type = PlayerPointType.valueOf(args[1].toUpperCase());
+			}
+			catch (IllegalArgumentException ex) {
 				Util.msg(s, "&cThis category doesn't exist!");
 				return;
 			}

@@ -65,17 +65,9 @@ public class PointsManager implements IOComponent {
 						nationEntries.putIfAbsent(n.getUUID(), new NationEntry(n.getUUID()));
 					}
 					
-					// Initialize all towns
-					rs = stmt.executeQuery("SELECT * FROM neoleaderboard_towns");
-					while (rs.next()) {
-						UUID uuid = UUID.fromString(rs.getString(1));
-						UUID nation = UUID.fromString(rs.getString(2));
-						nationEntries.get(nation).initializeTown(uuid, rs.getInt(4));
-					}
-					
 					// Set nationwide points
 					for (NationEntry n : nationEntries.values()) {
-						rs = stmt.executeQuery("SELECT * FROM neoleaderboard_nationpoints WHERE uuid = '" + "';");
+						rs = stmt.executeQuery("SELECT * FROM neoleaderboard_nationpoints WHERE uuid = '" + n.getUuid() + "';");
 						while (rs.next()) {
 							String type = rs.getString(2);
 							NationPointType ntype = NationPointType.valueOf(type);
@@ -289,18 +281,12 @@ public class PointsManager implements IOComponent {
 				
 				try {
 					HashMap<NationPointType, Double> points = nent.getAllNationPoints();
-					HashMap<UUID, TownEntry> tpoints = nent.getAllTownPoints();
 
 					insert.addBatch("REPLACE INTO neoleaderboard_nations VALUES ('"
 										+ nent.getUuid() + "','" + n.getName() + "'," + nent.getContributors() + ");");
 					for (Entry<NationPointType, Double> e : points.entrySet()) {
 						insert.addBatch("REPLACE INTO neoleaderboard_nationpoints VALUES ('"
 											+ nent.getUuid() + "','" + e.getKey() + "'," + e.getValue() + ");");
-					}
-					for (Entry<UUID, TownEntry> e : tpoints.entrySet()) {
-						TownEntry te = e.getValue();
-						insert.addBatch("REPLACE INTO neoleaderboard_towns VALUES ('"
-								+ e.getKey() + "','" + nent.getUuid() + "','" + te.getTown().getName() + "'," + te.getContributors() + ");");
 					}
 					insert.executeBatch();
 				}
