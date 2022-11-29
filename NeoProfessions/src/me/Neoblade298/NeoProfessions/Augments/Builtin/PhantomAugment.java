@@ -59,20 +59,21 @@ public class PhantomAugment extends Augment implements ModPotionAugment, ModDama
 	
 	@Override
 	public double getDamageDealtMult(LivingEntity user) {
-		return damageMult;
+		return damageMult / 4;
 	}
 	
+	// Can multiply damage
 	@Override
 	public boolean canUse(Player user, LivingEntity target) {
-		boolean canUse = !FlagManager.hasFlag(user, "aug_phantom") && AugmentManager.getPlayerAugments(user.getPlayer()).getCount(this) >= 4 &&
+		return AugmentManager.getPlayerAugments(user.getPlayer()).getCount(this) >= 4 &&
 				(user.hasPotionEffect(PotionEffectType.INVISIBILITY) || user.hasPotionEffect(PotionEffectType.SPEED));
-		if (canUse) FlagManager.addFlag(user, user, "aug_phantom", 20);
-		return canUse;
 	}
 	
+	// Can add potion effect
 	@Override
 	public boolean canUse(Player user, EntityPotionEffectEvent e) {
-		return !FlagManager.hasFlag(user, "aug_phantomPotion") && e.getAction().equals(Action.ADDED);
+		return !FlagManager.hasFlag(user, "aug_phantomPotion") && e.getAction().equals(Action.ADDED) &&
+				AugmentManager.getPlayerAugments(user.getPlayer()).getCount(this) >= 4;
 	}
 
 	@Override
@@ -93,7 +94,7 @@ public class PhantomAugment extends Augment implements ModPotionAugment, ModDama
 		lore.add("§7Anytime you gain invisibility, receive");
 		lore.add("§7speed and vice versa. 1s cooldown.");
 		lore.add("§7Having either speed or invisibility");
-		lore.add("§7Grants §f" + formatPercentage(getDamageDealtMult(user)) + "% §7bonus damage.");
+		lore.add("§7Grants §f" + formatPercentage(damageMult) + "% §7bonus damage.");
 		meta.setLore(lore);
 		item.setItemMeta(meta);
 		return item;

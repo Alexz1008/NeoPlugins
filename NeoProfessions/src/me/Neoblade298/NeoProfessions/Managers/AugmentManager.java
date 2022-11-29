@@ -466,6 +466,7 @@ public class AugmentManager implements Listener, Manager {
 							double mult = aug.getDamageDealtMult(p);
 							if (mult > 0) {
 								posmult += mult;
+								System.out.println("Adding " + mult + ", now " + posmult);
 							}
 							else if (mult < 0) {
 								negmult *= (1 + mult);
@@ -514,6 +515,7 @@ public class AugmentManager implements Listener, Manager {
 				}
 			}
 		}
+		System.out.println("Final posmult " + posmult);
 		e.setPosmult(posmult);
 		e.setNegmult(negmult);
 		e.setFlat(flat);
