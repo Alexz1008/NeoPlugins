@@ -438,7 +438,11 @@ public class AugmentManager implements Listener, Manager {
 	
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onDealDamage(PlayerCalculateDamageEvent e) {
-		if (e.getCaster() == e.getTarget() || !(e.getCaster() instanceof Player)) {
+		if (!(e.getCaster() instanceof Player)) {
+			return;
+		}
+		// Hard code: If it's caster=target, only let it through if it's corruption damage
+		if (e.getCaster() == e.getTarget() && !containsType(e.getTypes(), "SKILL_DEFENSEcorruption")) {
 			return;
 		}
 		if (containsType(e.getTypes(), "nobuff")) {

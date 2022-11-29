@@ -51,7 +51,8 @@ public class GhostsOfThePastAugment extends Augment implements ModDamageDealtAug
 	@Override
 	public void applyDamageDealtEffects(Player user, LivingEntity target, double damage) {
 		Skill skill = SkillAPI.getSkill("aug_ghostsOfThePast");
-        ((SkillShot) skill).cast(user, (int) (damage * corruptionDmg));
+		final int corruptDmgFinal = Math.max(1, (int) (damage * corruptionDmg));
+        ((SkillShot) skill).cast(user, corruptDmgFinal);
 	}
 	
 	@Override

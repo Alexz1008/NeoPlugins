@@ -37,7 +37,7 @@ public class RedemptionAugment extends Augment implements ModDamageTakenAugment 
 	@Override
 	public boolean canUse(Player user, LivingEntity target, PlayerCalculateDamageEvent e) {
 		for (String type : e.getTypes()) {
-			if (type.equals("corruption")) {
+			if (type.endsWith("corruption")) {
 				return true;
 			}
 		}
